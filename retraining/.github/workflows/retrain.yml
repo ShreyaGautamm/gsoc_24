@@ -1,0 +1,36 @@
+name: Retrain Model
+
+on:
+  push:
+    paths:
+      - 'retraining/copyright_data/**'  # Trigger action when a file is pushed to the new_data folder
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Adjust based on your needs
+
+      - name: Install dependencies
+        run: |
+          cd retraining  # Navigate to the retrain directory
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run retraining script
+        run: |
+          cd retraining  # Ensure we are in the retrain directory
+          python retrain_sgd_model.py
+
+      - name: Upload model artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: retrained-model
+          path: retrain/models/
