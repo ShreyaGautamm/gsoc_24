@@ -1,4 +1,3 @@
 pandas
-spacy==3.5.1
 joblib
 scikit-learn
